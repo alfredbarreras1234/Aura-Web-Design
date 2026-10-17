@@ -5,13 +5,14 @@ import ServicesSection from '../components/sections/ServicesSection.jsx'
 import AboutSection from '../components/sections/AboutSection.jsx'
 import ReviewsSection from '../components/sections/ReviewsSection.jsx'
 import ContactSection from '../components/sections/ContactSection.jsx'
+import AdminSection from '../components/sections/AdminSection.jsx'
 
 export default function Home() {
   return (<>
     <Navbar />
     <main>
       <HeroSection /><ServicesSection /><AboutSection />
-      <ReviewsSection /><ContactSection />
+      <ReviewsSection /><ContactSection /><AdminSection />
     </main>
     <Footer />
   </>)

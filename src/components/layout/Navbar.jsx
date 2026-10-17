@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ThemeToggle from './ThemeToggle.jsx'
-export const LINKS = [['inicio','Inicio'],['servicios','Servicios'],['quienes-somos','Cómo trabajamos'],['resenas','Reseñas'],['contacto','Contacto']]
+export const LINKS = [['inicio','Inicio'],['servicios','Servicios'],['quienes-somos','Cómo trabajamos'],['resenas','Reseñas'],['contacto','Contacto'],['admin','Admin']]
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   return (

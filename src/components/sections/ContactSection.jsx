@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabaseClient.js'
-import { WHATSAPP_LINK, BUSINESS_PHONE, PHONE_LINK } from '../../lib/contact.js'
+import {
+  WHATSAPP_LINK,
+  BUSINESS_PHONE,
+  PHONE_LINK,
+  saveContactMessage,
+} from '../../lib/contact.js'
+
 const RULES = {
   name: v => v.trim().length >= 2 || 'Ingresa tu nombre.',
   email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Correo electrónico inválido.',
@@ -9,21 +15,36 @@ const RULES = {
 }
 const EMPTY = { name: '', email: '', subject: '', message: '' }
 const LABELS = { name: 'Nombre', email: 'Correo electrónico', subject: 'Asunto', message: 'Mensaje' }
+
 export default function ContactSection() {
   const [f, setF] = useState(EMPTY), [errs, setErrs] = useState({}), [status, setStatus] = useState('idle')
   const msg = (k, v) => { const r = RULES[k](v); return r === true ? '' : r }
   const change = k => e => { const v = e.target.value; setF(p => ({ ...p, [k]: v })); setErrs(p => ({ ...p, [k]: msg(k, v) })) }
+
   const submit = async e => {
     e.preventDefault()
-    const all = Object.fromEntries(Object.keys(RULES).map(k => [k, msg(k, f[k])]))
-    setErrs(all); if (Object.values(all).some(Boolean)) return
+    const payload = { ...f, created_at: new Date().toISOString() }
+    const all = Object.fromEntries(Object.keys(RULES).map(k => [k, msg(k, payload[k])]))
+    setErrs(all)
+    if (Object.values(all).some(Boolean)) return
+
+    saveContactMessage(payload)
+
     if (!supabase) {
-      setStatus('error')
+      setStatus('ok')
+      setF(EMPTY)
       return
     }
+
     setStatus('loading')
     try {
-      const { error } = await supabase.from('contacts').insert(f)
+      const { error } = await supabase.from('contacts').insert({
+        name: f.name,
+        email: f.email,
+        subject: f.subject,
+        message: f.message,
+      })
+
       if (error) throw error
       setStatus('ok')
       setF(EMPTY)
@@ -32,6 +53,7 @@ export default function ContactSection() {
       setStatus('error')
     }
   }
+
   return (
     <section id="contacto"><div className="wrap">
       <div className="section-heading contact-heading">

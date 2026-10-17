@@ -172,6 +172,89 @@ textarea { resize: vertical; }
 }
 button, input, textarea { touch-action: manipulation; }
 ::selection { background: var(--accent); color: #fff; }
+.admin-section { padding-top: 40px; }
+.admin-login,
+.admin-panel {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, var(--surface), var(--bg-soft));
+  box-shadow: 0 20px 48px rgba(22, 29, 21, 0.08);
+}
+.admin-login { max-width: 420px; }
+.admin-form { display: grid; gap: 12px; }
+.admin-form label { font-weight: 600; }
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.admin-panel-title { font-size: 1.2rem; font-weight: 700; }
+.admin-badge {
+  display: inline-block;
+  margin-top: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--bg-soft);
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.btn-secondary {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--ink);
+}
+.btn-secondary:hover { background: var(--surface); color: var(--ink); }
+.admin-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.admin-stat {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.admin-stat span {
+  display: block;
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.admin-stat strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.04rem;
+}
+.admin-empty { color: var(--muted); }
+.admin-list { display: grid; gap: 16px; }
+.admin-card {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.admin-card-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.admin-card-head strong { font-size: 1.05rem; }
+.admin-card-head span,
+.admin-meta { color: var(--muted); font-size: .9rem; }
+.admin-message {
+  margin-top: 12px;
+  white-space: pre-wrap;
+  color: var(--ink);
+}
 @media (max-width: 860px) {
   .burger { display: block; }
   .links { position: absolute; top: 71px; right: 0; left: 0; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 24px 18px; border-bottom: 1px solid var(--line); background: var(--bg); }
