@@ -104,36 +104,36 @@ export default function AdminSection() {
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    if (supabase && ADMIN_EMAIL) {
-      const cleanEmail = email.trim().toLowerCase()
-      if (!cleanEmail || !password) {
-        setError('Ingresa tu correo y contraseña.')
-        return
-      }
+    const cleanEmail = email.trim().toLowerCase()
+    const localPasswordMatches = password === getAdminPassword()
 
+    if (supabase && ADMIN_EMAIL && cleanEmail) {
       try {
         const { error } = await supabase.auth.signInWithPassword({
           email: cleanEmail,
           password,
         })
 
-        if (error) throw error
-
-        setError('')
-        setIsLoggedIn(true)
-        window.localStorage.setItem(ADMIN_LOGIN_KEY, 'true')
-        return
+        if (!error) {
+          setError('')
+          setIsLoggedIn(true)
+          window.localStorage.setItem(ADMIN_LOGIN_KEY, 'true')
+          return
+        }
       } catch (loginError) {
         console.error('Error al iniciar sesión en Supabase:', loginError)
-        setError('Credenciales incorrectas o usuario no autorizado.')
-        return
       }
     }
 
-    if (password === getAdminPassword()) {
+    if (localPasswordMatches) {
       window.localStorage.setItem(ADMIN_LOGIN_KEY, 'true')
       setError('')
       setIsLoggedIn(true)
+      return
+    }
+
+    if (supabase && ADMIN_EMAIL && cleanEmail) {
+      setError('Credenciales incorrectas o usuario no autorizado.')
       return
     }
 
