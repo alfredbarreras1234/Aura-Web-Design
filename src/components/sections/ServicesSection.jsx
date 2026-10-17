@@ -1,16 +1,19 @@
 const SERVICES = [
-  ['🖥️','Diseño Web','Sitios corporativos con identidad propia y enfoque en conversión.',['Diseño a medida','Responsivo','Optimizado para SEO']],
-  ['⚙️','Desarrollo a Medida','Aplicaciones web escalables con React, Supabase y despliegue en Vercel.',['Código mantenible','Panel administrable','Alto rendimiento']],
-  ['🛒','Tiendas en Línea','Comercio electrónico seguro con catálogo, carrito y pagos.',['Pagos seguros','Gestión de inventario','Reportes de ventas']],
-  ['🚀','Mantenimiento y SEO','Soporte continuo, mejoras y posicionamiento en buscadores.',['Actualizaciones','Respaldos','Análisis mensual']],
+  ['01','Sitios web','Una página clara para presentar tu negocio, tus servicios y facilitar el contacto.',['Diseño adaptable a móviles','Contenido organizado','Contacto por formulario o WhatsApp']],
+  ['02','Tiendas en línea','Muestra tus productos y recibe pedidos desde una tienda pensada para tus clientes.',['Catálogo de productos','Carrito de compras','Integración de pagos según el proyecto']],
+  ['03','Desarrollo a medida','Funciones e integraciones pensadas para lo que tu proyecto necesita.',['Flujos y herramientas propias','Integraciones con otros servicios','Una base preparada para crecer']],
+  ['04','Mantenimiento','Ajustes y mejoras para que tu sitio siga al día después de publicarlo.',['Cambios de contenido','Actualizaciones','Ayuda cuando la necesites']],
 ]
 export default function ServicesSection() {
   return (
     <section id="servicios"><div className="wrap">
-      <h2>Servicios</h2><p className="sub">Todo lo que tu presencia digital necesita.</p>
-      <div className="grid">
+      <div className="section-heading">
+        <div><p className="eyebrow">En qué podemos ayudarte</p><h2>Lo necesario para llevar tu negocio a la web.</h2></div>
+        <p className="sub">Cada proyecto es distinto. Cuéntanos qué tienes en mente y vemos juntos por dónde empezar.</p>
+      </div>
+      <div className="grid service-grid">
         {SERVICES.map(([ic, t, d, b]) => (
-          <article className="card" key={t}><div className="ic">{ic}</div><h3>{t}</h3><p>{d}</p>
+          <article className="card service-card" key={t}><span className="service-number">{ic}</span><h3>{t}</h3><p>{d}</p>
             <ul>{b.map(x => <li key={x}>{x}</li>)}</ul></article>
         ))}
       </div>

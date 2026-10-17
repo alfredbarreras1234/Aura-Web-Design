@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabaseClient.js'
+import { WHATSAPP_LINK, BUSINESS_PHONE, PHONE_LINK } from '../../lib/contact.js'
 const RULES = {
   name: v => v.trim().length >= 2 || 'Ingresa tu nombre.',
   email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Correo electrónico inválido.',
@@ -33,7 +34,10 @@ export default function ContactSection() {
   }
   return (
     <section id="contacto"><div className="wrap">
-      <h2>Contáctanos</h2><p className="sub">Cuéntanos sobre tu proyecto.</p>
+      <div className="section-heading contact-heading">
+        <div><p className="eyebrow">Hablemos</p><h2>Cuéntanos qué tienes en mente.</h2></div>
+        <p className="sub">Escríbenos con una idea, una pregunta o simplemente para conocer cómo podemos ayudarte.</p>
+      </div>
       <div className="two">
         <form onSubmit={submit} noValidate>
           {Object.keys(RULES).map(k => (
@@ -50,9 +54,11 @@ export default function ContactSection() {
             {status === 'error' && (supabase ? 'No se pudo enviar. Intenta de nuevo.' : 'El formulario no está disponible: configura la conexión con Supabase para recibir mensajes.')}
           </div>
         </form>
-        <div>
-          <p>📍 Santa Tecla, El Salvador</p><p>✉️ contacto@aurawebdesign.com</p><p>📞 +503 0000-0000</p>
-          <iframe title="Mapa" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-89.30%2C13.65%2C-89.26%2C13.69&layer=mapnik" />
+        <div className="contact-direct">
+          <p className="eyebrow">Contacto directo</p>
+          <a className="contact-phone" href={PHONE_LINK}>{BUSINESS_PHONE}</a>
+          <p>Elige cómo prefieres comunicarte.</p>
+          <a className="btn" href={WHATSAPP_LINK} target="_blank" rel="noreferrer">Escríbenos por WhatsApp <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </div></section>

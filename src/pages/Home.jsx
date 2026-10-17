@@ -3,7 +3,6 @@ import Footer from '../components/layout/Footer.jsx'
 import HeroSection from '../components/sections/HeroSection.jsx'
 import ServicesSection from '../components/sections/ServicesSection.jsx'
 import AboutSection from '../components/sections/AboutSection.jsx'
-import GallerySection from '../components/sections/GallerySection.jsx'
 import ReviewsSection from '../components/sections/ReviewsSection.jsx'
 import ContactSection from '../components/sections/ContactSection.jsx'
 
@@ -12,7 +11,7 @@ export default function Home() {
     <Navbar />
     <main>
       <HeroSection /><ServicesSection /><AboutSection />
-      <GallerySection /><ReviewsSection /><ContactSection />
+      <ReviewsSection /><ContactSection />
     </main>
     <Footer />
   </>)
