@@ -3,7 +3,6 @@ export const PHONE_LINK = 'tel:+50369662264'
 export const WHATSAPP_LINK = 'https://wa.me/50369662264'
 export const CONTACT_MESSAGES_KEY = 'aura_contact_messages'
 export const ADMIN_SESSION_KEY = 'aura_admin_session'
-export const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || '').trim().toLowerCase()
 
 export function getAdminPassword() {
   return import.meta.env.VITE_ADMIN_PASSWORD || 'aura2025'

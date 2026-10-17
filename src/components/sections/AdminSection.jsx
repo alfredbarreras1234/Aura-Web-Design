@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient.js'
 import {
-  ADMIN_EMAIL,
   ADMIN_SESSION_KEY,
   getAdminPassword,
   getStoredMessages,
@@ -20,7 +19,6 @@ function formatDate(value) {
 }
 
 export default function AdminSection() {
-  const [email, setEmail] = useState(ADMIN_EMAIL || '')
   const [password, setPassword] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     if (typeof window === 'undefined') return false
@@ -37,23 +35,19 @@ export default function AdminSection() {
 
     const syncSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
-      const allowed = ADMIN_EMAIL && session?.user?.email?.toLowerCase() === ADMIN_EMAIL
-      if (allowed) {
+      if (session) {
         setIsLoggedIn(true)
         if (typeof window !== 'undefined') {
           window.localStorage.setItem(ADMIN_LOGIN_KEY, 'true')
         }
-      } else if (typeof window !== 'undefined') {
-        window.localStorage.removeItem(ADMIN_LOGIN_KEY)
       }
     }
 
     syncSession()
 
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      const allowed = ADMIN_EMAIL && session?.user?.email?.toLowerCase() === ADMIN_EMAIL
-      setIsLoggedIn(Boolean(allowed))
-      if (allowed && typeof window !== 'undefined') {
+      setIsLoggedIn(Boolean(session))
+      if (session && typeof window !== 'undefined') {
         window.localStorage.setItem(ADMIN_LOGIN_KEY, 'true')
       } else if (typeof window !== 'undefined') {
         window.localStorage.removeItem(ADMIN_LOGIN_KEY)
@@ -104,24 +98,19 @@ export default function AdminSection() {
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    const cleanEmail = email.trim().toLowerCase()
     const localPasswordMatches = password === getAdminPassword()
 
-    if (supabase && ADMIN_EMAIL && cleanEmail) {
+    if (supabase) {
       try {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: cleanEmail,
-          password,
-        })
-
-        if (!error) {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session && password === getAdminPassword()) {
           setError('')
           setIsLoggedIn(true)
           window.localStorage.setItem(ADMIN_LOGIN_KEY, 'true')
           return
         }
       } catch (loginError) {
-        console.error('Error al iniciar sesión en Supabase:', loginError)
+        console.error('Error al validar la sesión de Supabase:', loginError)
       }
     }
 
@@ -129,11 +118,6 @@ export default function AdminSection() {
       window.localStorage.setItem(ADMIN_LOGIN_KEY, 'true')
       setError('')
       setIsLoggedIn(true)
-      return
-    }
-
-    if (supabase && ADMIN_EMAIL && cleanEmail) {
-      setError('Credenciales incorrectas o usuario no autorizado.')
       return
     }
 
@@ -164,26 +148,13 @@ export default function AdminSection() {
         {!isLoggedIn ? (
           <div className="admin-login">
             <form onSubmit={handleLogin} className="admin-form">
-              {supabase && (
-                <>
-                  <label htmlFor="admin-email">Correo electrónico</label>
-                  <input
-                    id="admin-email"
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="tu-email@dominio.com"
-                    autoComplete="email"
-                  />
-                </>
-              )}
               <label htmlFor="admin-password">Contraseña</label>
               <input
                 id="admin-password"
                 type="password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                placeholder={supabase ? 'Introduce tu contraseña' : 'Introduce tu contraseña local'}
+                placeholder="Introduce tu contraseña"
                 autoComplete="current-password"
               />
               {error && <div className="err">{error}</div>}
