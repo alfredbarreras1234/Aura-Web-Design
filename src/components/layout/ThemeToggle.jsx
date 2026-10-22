@@ -12,5 +12,5 @@ export default function ThemeToggle() {
     try { localStorage.setItem('theme', t) } catch { /* The selected theme still applies for this page. */ }
     setTheme(t)
   }
-  return <button className="icon-btn" onClick={toggle} aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}>{theme === 'dark' ? '☀️' : '🌙'}</button>
+  return <button className="icon-btn" onClick={toggle} aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}>{theme === 'dark' ? '☀' : '☾'}</button>
 }

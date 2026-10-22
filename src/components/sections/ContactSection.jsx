@@ -4,6 +4,8 @@ import {
   WHATSAPP_LINK,
   BUSINESS_PHONE,
   PHONE_LINK,
+  CONTACT_EMAIL,
+  sendContactEmail,
   saveContactMessage,
 } from '../../lib/contact.js'
 
@@ -28,30 +30,38 @@ export default function ContactSection() {
     setErrs(all)
     if (Object.values(all).some(Boolean)) return
 
-    saveContactMessage(payload)
-
-    if (!supabase) {
-      setStatus('ok')
-      setF(EMPTY)
-      return
-    }
-
     setStatus('loading')
     try {
-      const { error } = await supabase.from('contacts').insert({
-        name: f.name,
-        email: f.email,
-        subject: f.subject,
-        message: f.message,
-      })
-
-      if (error) throw error
-      setStatus('ok')
-      setF(EMPTY)
+      await sendContactEmail(payload)
     } catch (error) {
       console.error('No se pudo enviar el formulario de contacto:', error)
       setStatus('error')
+      return
     }
+
+    saveContactMessage(payload)
+    setF(EMPTY)
+
+    if (supabase) {
+      try {
+        const { error } = await supabase.from('contacts').insert({
+          name: f.name,
+          email: f.email,
+          subject: f.subject,
+          message: f.message,
+        })
+
+        if (error) {
+          throw error
+        }
+      } catch (error) {
+        console.error('El mensaje llegó al correo, pero no se pudo guardar en Supabase:', error)
+        setStatus('saved-with-warning')
+        return
+      }
+    }
+
+    setStatus('ok')
   }
 
   return (
@@ -73,12 +83,14 @@ export default function ContactSection() {
           <button className="btn" disabled={status === 'loading'}>{status === 'loading' ? 'Enviando…' : 'Enviar mensaje'}</button>
           <div role="status" className={status === 'ok' ? 'ok' : 'err'}>
             {status === 'ok' && '✅ ¡Mensaje enviado! Te responderemos pronto.'}
-            {status === 'error' && (supabase ? 'No se pudo enviar. Intenta de nuevo.' : 'El formulario no está disponible: configura la conexión con Supabase para recibir mensajes.')}
+            {status === 'saved-with-warning' && 'Tu mensaje llegó al correo, pero no se pudo guardar en el panel.'}
+            {status === 'error' && 'No se pudo enviar el mensaje. Intenta de nuevo más tarde.'}
           </div>
         </form>
         <div className="contact-direct">
           <p className="eyebrow">Contacto directo</p>
           <a className="contact-phone" href={PHONE_LINK}>{BUSINESS_PHONE}</a>
+          <a className="contact-email" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           <p>Elige cómo prefieres comunicarte.</p>
           <a className="btn" href={WHATSAPP_LINK} target="_blank" rel="noreferrer">Escríbenos por WhatsApp <span aria-hidden="true">↗</span></a>
         </div>
